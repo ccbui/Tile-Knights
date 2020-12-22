@@ -24,11 +24,27 @@ var Playing;
 var soundsLoaded=0;
 var soundLength;
 var cueChanges = 0;
+var level = 1
+var normTile;
+var normWall;
+var innerWall;
+var placing;
+var currentlyPlacing;
 function setup() {
   createCanvas(1900, 960);
   DemonSpawn = createImg("Assets/DemonSpawnGif.gif","error");
   GrassTile = loadImage("Assets/GrassTile.png");
   GrassAmbient = loadSound('Assets/Grasslands Floor Ambient.mp3', loaded);
+  innerWall = loadImage('Assets/InnerWall.png');
+  placing = createButton('Placement Mode');
+  placing.mousePressed(PlacementMode);
+}
+function PlacementMode() {
+  if (!currentlyPlacing) {
+     currentlyPlacing = true; 
+  } else {
+      currentlyPlacing = false;
+  }
 }
 function loaded() {
   soundsLoaded++
@@ -51,28 +67,31 @@ function PlayCurrentSound() {
 }
 
 function draw() {
+  if (level == 1) {
+    normTile = GrassTile;
+    Playing = GrassAmbient;
+  }
   background(220);
   if (cueChanges%2 == 0){
    // SoundLooper = Playing.addCue(24,LoopSound);
   }
-  for (l=0;l<11;l++) {
-  for (w=0;w<11;w++){
-    image(GrassTile,100*l,100*w,100,100)
+  for (l=0;l<10;l++) {
+  for (w=0;w<10;w++){
+    var id = TileSets[l][w];
+    switch(id) {
+      case 0:
+    image(normTile,100*l,100*w,100,100)
+        break;
+      case 1:
+    image(innerWall,100*l,100*w,100,100)
+        break;
+    }
   }
 }
+if(currentlyPlacing){
+  PlacingWalls()   
 }
-  Playing.play();
-  Playing.setVolume(0.2);
 }
-
-function draw() {
-  background(220);
-  if (cueChanges%2 == 0){
-   // SoundLooper = Playing.addCue(24,LoopSound);
-  }
-  for (l=0;l<11;l++) {
-  for (w=0;w<11;w++){
-    rect(10*l,10*w,10,10)
-  }
-}
+function PlacingWalls() {
+  
 }
