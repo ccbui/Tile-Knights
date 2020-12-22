@@ -25,7 +25,7 @@ var soundsLoaded=0;
 var soundLength;
 var cueChanges = 0;
 function setup() {
-  createCanvas(1280, 1024);
+  createCanvas(1900, 960);
   DemonSpawn = createImg("Assets/DemonSpawnGif.gif","error");
   GrassTile = loadImage("Assets/GrassTile.png");
   GrassAmbient = loadSound('Assets/Grasslands Floor Ambient.mp3', loaded);
@@ -46,6 +46,21 @@ function AddCustomizedCue() {
   SoundLooper = Playing.addCue(24,LoopSound);
 }
 function PlayCurrentSound() {
+  Playing.play();
+  Playing.setVolume(0.2);
+}
+
+function draw() {
+  background(220);
+  if (cueChanges%2 == 0){
+   // SoundLooper = Playing.addCue(24,LoopSound);
+  }
+  for (l=0;l<11;l++) {
+  for (w=0;w<11;w++){
+    image(GrassTile,100*l,100*w,100,100)
+  }
+}
+}
   Playing.play();
   Playing.setVolume(0.2);
 }
