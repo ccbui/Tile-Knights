@@ -1,0 +1,63 @@
+var FloorTiles= [[0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0]];
+var TileSets = [[0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0]];
+var DemonSpawn;
+var GrassTile;
+var GrassAmbient;
+var SoundLooper;
+var Playing;
+var soundsLoaded=0;
+var soundLength;
+var cueChanges = 0;
+function setup() {
+  createCanvas(1280, 1024);
+  DemonSpawn = createImg("Assets/DemonSpawnGif.gif","error");
+  GrassTile = loadImage("Assets/GrassTile.png");
+  GrassAmbient = loadSound('Assets/Grasslands Floor Ambient.mp3', loaded);
+}
+function loaded() {
+  soundsLoaded++
+  Playing = GrassAmbient
+  PlayCurrentSound()
+  SoundLooper = Playing.addCue(24,LoopSound);
+  soundLength = Playing.duration();
+}
+function LoopSound() {
+  PlayCurrentSound()
+  Playing.removeCue(SoundLooper)
+  cueChanges++
+}
+function AddCustomizedCue() {
+  SoundLooper = Playing.addCue(24,LoopSound);
+}
+function PlayCurrentSound() {
+  Playing.play();
+  Playing.setVolume(0.2);
+}
+
+function draw() {
+  background(220);
+  if (cueChanges%2 == 0){
+   // SoundLooper = Playing.addCue(24,LoopSound);
+  }
+  for (l=0;l<11;l++) {
+  for (w=0;w<11;w++){
+    rect(10*l,10*w,10,10)
+  }
+}
+}
