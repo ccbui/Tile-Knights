@@ -16,6 +16,21 @@ var TileSets = [[0,0,0,0,0,0,0,0,0,0],
                 [0,0,0,0,0,0,0,0,0,0],
                 [0,0,0,0,0,0,0,0,0,0],
                 [0,0,0,0,0,0,0,0,0,0]];
+var TileAssets =[[0,0,0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0,0,0]];
+var keyDown;
+var playerX=0;
+var playerY = 0;
+var selected = 0;
+var mouseDown;
 var DemonSpawn;
 var GrassTile;
 var GrassAmbient;
@@ -30,20 +45,30 @@ var normWall;
 var innerWall;
 var placing;
 var currentlyPlacing;
+var CurrentArray;
 function setup() {
-  createCanvas(1900, 960);
+  createCanvas(1900, 1000);
   DemonSpawn = createImg("Assets/DemonSpawnGif.gif","error");
   GrassTile = loadImage("Assets/GrassTile.png");
   GrassAmbient = loadSound('Assets/Grasslands Floor Ambient.mp3', loaded);
   innerWall = loadImage('Assets/InnerWall.png');
   placing = createButton('Placement Mode');
   placing.mousePressed(PlacementMode);
+  StoneWall = loadImage('Assets/FullWall.png');
 }
 function PlacementMode() {
   if (!currentlyPlacing) {
      currentlyPlacing = true; 
   } else {
       currentlyPlacing = false;
+    CurrentArray ='';
+  for (l=0;l<10;l++) {
+  for (w=0;w<10;w++){
+  CurrentArray = CurrentArray+','+TileSets[l][w];
+  }
+  CurrentArray = CurrentArray+';'
+  }
+    print(CurrentArray)
   }
 }
 function loaded() {
@@ -69,6 +94,7 @@ function PlayCurrentSound() {
 function draw() {
   if (level == 1) {
     normTile = GrassTile;
+    normWall = StoneWall
     Playing = GrassAmbient;
   }
   background(220);
@@ -80,10 +106,10 @@ function draw() {
     var id = TileSets[l][w];
     switch(id) {
       case 0:
-    image(normTile,100*l,100*w,100,100)
+    image(normTile,100*l+playerX,100*w+playerY,100,100)
         break;
       case 1:
-    image(innerWall,100*l,100*w,100,100)
+    image(innerWall,100*l+playerX,100*w+playerY,100,100)
         break;
     }
   }
@@ -93,5 +119,34 @@ if(currentlyPlacing){
 }
 }
 function PlacingWalls() {
-  
+  if (isKeyPressed && key == 'e' && frameCount%10 == 0) {
+    selected++
+  }
+   if (isKeyPressed && key == 'q' && frameCount%10 == 0) {
+    selected--
+  }
+  if (selected == 0) {
+  image(normTile, 100*floor((mouseX+playerX)/100), 100*floor((mouseY+playerY)/100),100,100)
+  } else {
+    rect(100*floor((mouseX+playerX)/100), 100*floor((mouseY+playerY)/100),100,100)
+  }
+  if (selected == 1) {
+  image(innerWall, 100*floor((mouseX+playerX)/100), 100*floor((mouseY+playerY)/100),100,100)
+  image(normWall, 100*floor((mouseX+playerX)/100), 100*floor((mouseY+playerY)/100),100,100)
+}
+  if (mouseDown && mouseX>0 && mouseY>0 && mouseX<1900 && mouseY<1000) {
+    TileSets[floor((mouseX+playerX)/100)][floor((mouseY+playerY)/ 100)] = selected
+  }
+}
+function mousePressed() {
+  mouseDown = true;
+}
+function mouseReleased() {
+  mouseDown = false;
+}
+function keyPressed() {
+  keyDown = true;
+}
+function keyReleased() {
+  keyDown = false
 }
